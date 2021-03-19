@@ -1,0 +1,112 @@
+{
+	"name": "movies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "landingzoneblob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "movies.csv",
+				"container": "landingzone"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "imdb_title_id",
+				"type": "String"
+			},
+			{
+				"name": "title",
+				"type": "String"
+			},
+			{
+				"name": "original_title",
+				"type": "String"
+			},
+			{
+				"name": "year",
+				"type": "String"
+			},
+			{
+				"name": "date_published",
+				"type": "String"
+			},
+			{
+				"name": "genre",
+				"type": "String"
+			},
+			{
+				"name": "duration",
+				"type": "String"
+			},
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "language",
+				"type": "String"
+			},
+			{
+				"name": "director",
+				"type": "String"
+			},
+			{
+				"name": "writer",
+				"type": "String"
+			},
+			{
+				"name": "production_company",
+				"type": "String"
+			},
+			{
+				"name": "actors",
+				"type": "String"
+			},
+			{
+				"name": "description",
+				"type": "String"
+			},
+			{
+				"name": "avg_vote",
+				"type": "String"
+			},
+			{
+				"name": "votes",
+				"type": "String"
+			},
+			{
+				"name": "budget",
+				"type": "String"
+			},
+			{
+				"name": "usa_gross_income",
+				"type": "String"
+			},
+			{
+				"name": "worlwide_gross_income",
+				"type": "String"
+			},
+			{
+				"name": "metascore",
+				"type": "String"
+			},
+			{
+				"name": "reviews_from_users",
+				"type": "String"
+			},
+			{
+				"name": "reviews_from_critics",
+				"type": "String"
+			}
+		]
+	}
+}
