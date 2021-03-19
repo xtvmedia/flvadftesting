@@ -1,0 +1,36 @@
+{
+	"name": "dataflow4",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "azuredeltalakels",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "azuredeltalakels",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				},
+				{
+					"name": "AlterRow1"
+				}
+			],
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delta',\n\tfileSystem: 'delta') ~> source1\nsource1 derive(imdb_title_id = toString(byName('imdb_title_id')),\n\t\ttitle = toString(byName('title')),\n\t\toriginal_title = toString(byName('original_title')),\n\t\tyear = toShort(byName('year')),\n\t\tdate_published = toString(byName('date_published')),\n\t\tgenre = toString(byName('genre')),\n\t\tduration = toShort(byName('duration')),\n\t\tcountry = toString(byName('country')),\n\t\tlanguage = toString(byName('language')),\n\t\tdirector = toString(byName('director')),\n\t\twriter = toString(byName('writer')),\n\t\tproduction_company = toString(byName('production_company')),\n\t\tactors = toString(byName('actors')),\n\t\tdescription = toString(byName('description')),\n\t\tavg_vote = toString(byName('avg_vote')),\n\t\tvotes = toString(byName('votes')),\n\t\tbudget = toString(byName('budget')),\n\t\tusa_gross_income = toString(byName('usa_gross_income')),\n\t\tworlwide_gross_income = toString(byName('worlwide_gross_income')),\n\t\tmetascore = toString(byName('metascore')),\n\t\treviews_from_users = toShort(byName('reviews_from_users')),\n\t\treviews_from_critics = toShort(byName('reviews_from_critics'))) ~> MapDrifted1\nMapDrifted1 alterRow(deleteIf(duration<100)) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'delta',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:false,\n\tkeys:['imdb_title_id'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}
