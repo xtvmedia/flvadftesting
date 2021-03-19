@@ -1,0 +1,35 @@
+{
+	"name": "dataflow3",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "azuredeltalakels",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "azuredeltalakels",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "AlterRow1"
+				}
+			],
+			"script": "source(output(\n\t\timdb_title_id as string,\n\t\ttitle as string,\n\t\toriginal_title as string,\n\t\tyear as short,\n\t\tdate_published as string,\n\t\tgenre as string,\n\t\tduration as short,\n\t\tcountry as string,\n\t\tlanguage as string,\n\t\tdirector as string,\n\t\twriter as string,\n\t\tproduction_company as string,\n\t\tactors as string,\n\t\tdescription as string,\n\t\tavg_vote as string,\n\t\tvotes as string,\n\t\tbudget as string,\n\t\tusa_gross_income as string,\n\t\tworlwide_gross_income as string,\n\t\tmetascore as string,\n\t\treviews_from_users as short,\n\t\treviews_from_critics as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delta',\n\tfileSystem: 'delta') ~> source1\nsource1 derive(metascore = toString(100)) ~> DerivedColumn1\nDerivedColumn1 alterRow(updateIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'delta',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['imdb_title_id'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}
